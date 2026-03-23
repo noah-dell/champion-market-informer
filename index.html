@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Champion Steel Works — Construction Market Informer</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Champion Steel Works brand fonts — served from Wix CDN */
+  @font-face {
+    font-family: 'avenir-heavy';
+    src: url("//static.parastorage.com/fonts/v2/74290729-59ae-4129-87d0-2eec3974dce1/v1/avenir-lt-w01_85-heavy1475544.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'avenir-light';
+    src: url("//static.parastorage.com/fonts/v2/af36905f-3c92-4ef9-b0c1-f91432f16ac1/v1/avenir-lt-w01_35-light1475496.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'helvetica-w01-light';
+    src: url("//static.parastorage.com/fonts/v2/8eac109b-0fa9-42bf-a305-43e471e23779/v1/helvetica-w01-light.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brown: #8D3F2B;
+    --brown-light: #f5e8e4;
+    --brown-dark: #743E2A;
+    --gold: #EDCD1F;
+    --gold-dark: #d4b818;
+    --gold-light: #fdf8e1;
+    --charcoal: #3B3A3A;
+    --gray: #CBCBCB;
+    --gray-light: #e8e8e8;
+    --black: #323232;
+    --white: #FFFFFF;
+    --bg: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --border: #E5E5E0;
+    --text-muted: #595959;
+    --text-light: #949494;
+    --green: #2D7A4F;
+    --green-light: #E8F5EE;
+    --amber: #B8860B;
+    --amber-light: #FFF8E7;
+    --red-signal: #C0392B;
+    --red-signal-light: #FDEDEB;
+    --blue: #2E6B9E;
+  }
+  body {
+    min-height: 100vh; background: var(--bg); color: var(--charcoal);
+    font-family: 'avenir-light', 'helvetica-w01-light', Helvetica, Arial, sans-serif; line-height: 1.6;
+  }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  .section-label {
+    font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif; font-size: 11px; font-weight: 400;
+    letter-spacing: 0.1em; color: var(--brown); margin-bottom: 20px; text-transform: uppercase;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .heading { font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif; }
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px 20px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: var(--gray); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+
+  /* ── Metric Cards ── */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(165px, 1fr)); gap: 12px; }
+  .metric-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 14px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .metric-card:hover { border-color: var(--brown); box-shadow: 0 2px 8px rgba(141,63,43,0.08); }
+  .metric-label {
+    font-size: 11px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.3;
+    font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .metric-value { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-family: 'JetBrains Mono', monospace; color: var(--black); }
+  .metric-change { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .metric-change .delta { font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .metric-change .sub { font-size: 10px; color: var(--text-light); }
+  .up { color: var(--green); }
+  .down { color: var(--red-signal); }
+
+  /* ── Tabs ── */
+  .tab-bar { display: flex; gap: 2px; margin-bottom: 20px; background: var(--gray-light); border-radius: 6px; padding: 3px; width: fit-content; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 7px 18px; border-radius: 4px; border: none; cursor: pointer;
+    font-size: 13px; font-weight: 600; font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif;
+    background: transparent; color: var(--text-muted); transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--card-bg); color: var(--brown); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  /* ── Sector Heatmap ── */
+  .sector-row {
+    display: grid; grid-template-columns: 32px 1fr 80px 60px 24px;
+    padding: 11px 16px; cursor: pointer; align-items: center;
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; transition: all 0.15s;
+  }
+  .sector-row:hover { border-color: var(--gray); background: #fefefe; }
+  .sector-row.expanded { border-radius: 6px 6px 0 0; background: var(--bg); border-color: var(--gray); }
+  .sector-detail {
+    background: var(--bg); border-radius: 0 0 6px 6px;
+    border: 1px solid var(--gray); border-top: none; padding: 16px 20px;
+  }
+  .heat-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .heat-hot { background: var(--red-signal); }
+  .heat-warm { background: var(--amber); }
+  .heat-cooling { background: var(--text-light); }
+  .heat-cold { background: var(--blue); }
+  .chevron {
+    display: inline-block; width: 18px; height: 18px; text-align: center; line-height: 18px;
+    font-size: 12px; color: var(--text-light); transition: transform 0.2s;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* ── Signal Badges ── */
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    padding: 3px 8px; border-radius: 3px; font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif;
+  }
+  .badge-positive { background: var(--green-light); color: var(--green); }
+  .badge-caution { background: var(--amber-light); color: var(--amber); }
+  .badge-warning { background: var(--red-signal-light); color: var(--red-signal); }
+
+  /* ── Outlook Cards ── */
+  .outlook-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; }
+  .outlook-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; display: flex; flex-direction: column; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .outlook-card:hover { border-color: var(--brown); box-shadow: 0 2px 8px rgba(141,63,43,0.06); }
+
+  /* ── Price Table ── */
+  .price-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .price-table th {
+    text-align: left; font-family: 'avenir-heavy', 'Avenir', Helvetica, sans-serif; font-size: 10px; font-weight: 700;
+    color: var(--text-light); letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 8px 12px; border-bottom: 2px solid var(--border);
+  }
+  .price-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .price-table tr:last-child td { border-bottom: none; }
+
+  /* ── Chart ── */
+  .chart-container { width: 100%; overflow-x: auto; }
+  .chart-container svg { display: block; }
+
+  /* ── Gold accent bar ── */
+  .gold-accent { height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 24px; width: 60px; }
+
+  /* ── Expand hint ── */
+  .expand-hint {
+    font-size: 11px; color: var(--text-light); margin-top: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .expand-hint svg { flex-shrink: 0; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .outlook-grid { grid-template-columns: 1fr; }
+    .sector-row { grid-template-columns: 24px 1fr 60px 50px 20px; font-size: 12px; padding: 9px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════ HEADER ═══════ -->
+<header style="padding:48px 0 36px; border-bottom:3px solid var(--brown);">
+  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+    <div>
+      <div style="margin-bottom:16px;">
+        <span class="heading" style="font-size:12px;color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;">Champion Steel Works &middot; Market Intelligence</span>
+      </div>
+      <h1 class="heading" style="font-weight:400;font-size:clamp(32px,4.5vw,50px);line-height:1.05;letter-spacing:-0.015em;color:var(--charcoal);">
+        Construction Market <span style="color:var(--brown);">Informer</span>
+      </h1>
+      <div style="margin-top:8px; height:4px; background:var(--gold); border-radius:2px; width:80px;"></div>
+      <div class="heading" style="margin-top:12px;display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:13px;font-weight:500;">
+        <span>March 2026 Edition</span>
+        <span style="width:4px;height:4px;border-radius:50%;background:var(--gray);display:inline-block;"></span>
+        <span>Updated monthly</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ KEY METRICS ═══════ -->
+<section style="padding:36px 0;">
+  <div class="section-label">Key Indicators</div>
+  <div class="metrics-grid" id="metrics-grid"></div>
+</section>
+
+<!-- ═══════ STEEL MARKET FOCUS ═══════ -->
+<section style="padding:0 0 36px;">
+  <div class="section-label">Steel Market Focus — Joist, Deck &amp; Structural Pricing</div>
+  <div class="card">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px;">
+      <!-- Left: Price Table -->
+      <div>
+        <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Current Price Indicators</div>
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">Sources: BLS PPI, FRED, Trading Economics &middot; March 2026</div>
+        <table class="price-table">
+          <thead><tr><th>Material</th><th>Index / Price</th><th style="text-align:right;">YoY Change</th></tr></thead>
+          <tbody id="steel-price-table"></tbody>
+        </table>
+      </div>
+      <!-- Right: Commentary -->
+      <div>
+        <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Market Commentary</div>
+        <div style="font-size:11px;color:var(--text-light);margin-bottom:12px;">Champion Steel Works analysis</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;">
+          <p style="margin-bottom:10px;"><strong style="color:var(--charcoal);">Structural steel</strong> prices have surged — HRC hit $1,015/ton (Nucor CSP, Mar 16), up 30%+ over 12 months. Beams are up $295/ton since March '25 with 10–12 week lead times. Section 232 tariffs (doubled to 50%) and strong demand from data center and infrastructure projects are the primary drivers.</p>
+          <p style="margin-bottom:10px;"><strong style="color:var(--charcoal);">Steel bar joists</strong> (BLS PPI series WPU1074051) have tracked the broader structural steel trend, with the index climbing steadily through 2025. Lead times remain extended at 8–12 weeks for standard K-series and 12–16 weeks for long-span LH/DLH-series.</p>
+          <p style="margin-bottom:10px;"><strong style="color:var(--charcoal);">Steel deck</strong> pricing tracks HRC closely. Composite floor deck (1.5" type B, 20 ga) is running $3.50–$5.00/SF installed; roof deck (1.5" type B/F, 22 ga) at $2.75–$4.25/SF. Quotes are typically valid 30 days — escalation clauses are strongly recommended.</p>
+          <p><strong style="color:var(--charcoal);">Outlook:</strong> 65% of U.S. steel professionals expect higher prices by Q2 2026. Tariff uncertainty and data center demand are the primary upward pressures. Inventory building ahead of potential trade policy shifts is adding short-term demand.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Steel Charts with Tabs -->
+    <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+      <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:12px;">Price Trend Charts</div>
+      <div class="tab-bar" id="steel-tab-bar"></div>
+      <div id="steel-chart-area"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ ABI DEEP DIVE ═══════ -->
+<section style="padding:0 0 36px;">
+  <div class="section-label">ABI Report — February 2026</div>
+  <div class="card">
+    <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">
+      <span class="mono" style="font-size:40px;font-weight:700;color:var(--brown);">49.4</span>
+      <span style="font-size:13px;color:var(--text-muted);">up from 43.8 in January</span>
+    </div>
+    <div style="font-size:13px;color:var(--text-muted);line-height:1.7;max-width:800px;margin-bottom:24px;">
+      Business conditions at architecture firms may be stabilizing. Inquiries rebounded after a January dip, and while newly signed design contracts continued to decline, the pace slowed significantly. However, billings have been sub-50 for 38 of the last 41 months — this is a potential inflection point, not a confirmed recovery. The South held flat for a second consecutive month while the Northeast was hit by winter storms. The ABI leads nonresidential construction activity by 9–12 months.
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:24px;">
+      <div style="background:var(--bg);border-radius:6px;padding:16px;border:1px solid var(--border);">
+        <div class="heading" style="font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">By Sector</div>
+        <div id="abi-sectors"></div>
+      </div>
+      <div style="background:var(--bg);border-radius:6px;padding:16px;border:1px solid var(--border);">
+        <div class="heading" style="font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase;">By Region</div>
+        <div id="abi-regions"></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text-light);">
+      48% of firm leaders expect billings to hold steady in Q2 2026. 31% anticipate a 5%+ increase. Multifamily billings have been negative for 43 consecutive months. Source: AIA/Deltek
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ HISTORIC TREND CHARTS ═══════ -->
+<section style="padding:0 0 40px;">
+  <div class="section-label">Historic Trends</div>
+  <div class="tab-bar" id="tab-bar"></div>
+  <div class="card" id="chart-card"></div>
+</section>
+
+<!-- ═══════ SECTOR HEATMAP ═══════ -->
+<section style="padding:0 0 40px;">
+  <div class="section-label">Sector Heatmap — AGC 2026 Outlook + 5-Year View</div>
+  <div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;display:flex;gap:20px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:6px;"><span class="heat-dot heat-hot"></span> Hot (net &gt;30%)</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span class="heat-dot heat-warm"></span> Warm (net 10–30%)</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span class="heat-dot heat-cooling"></span> Cooling (net 0–10%)</span>
+    <span style="display:flex;align-items:center;gap:6px;"><span class="heat-dot heat-cold"></span> Cold (net &lt;0%)</span>
+  </div>
+  <div class="expand-hint" style="margin-bottom:14px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Click any sector row to expand the 5-year outlook
+  </div>
+  <!-- Header Row -->
+  <div style="display:grid;grid-template-columns:32px 1fr 80px 60px 24px;padding:8px 16px;font-size:10px;font-family:'avenir-heavy','Avenir',Helvetica,sans-serif;font-weight:700;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase;">
+    <span></span><span>Sector</span><span style="text-align:right;">Net Reading</span><span style="text-align:right;">YOY &Delta;</span><span></span>
+  </div>
+  <div id="sector-list" style="display:flex;flex-direction:column;gap:2px;"></div>
+  <div style="font-size:11px;color:var(--text-light);margin-top:12px;">
+    Net reading = % expecting growth minus % expecting decline. Source: AGC/Sage 2026 Outlook Survey (n=951)
+  </div>
+</section>
+
+<!-- ═══════ MARKET OUTLOOK ═══════ -->
+<section style="padding:0 0 40px;">
+  <div class="section-label">Market Outlook &amp; Signals</div>
+  <div class="outlook-grid" id="outlook-grid"></div>
+</section>
+
+<!-- ═══════ METHODOLOGY ═══════ -->
+<section style="padding:28px 0;border-top:1px solid var(--border);">
+  <div class="section-label">Methodology &amp; Sources</div>
+  <div style="font-size:12px;color:var(--text-light);line-height:1.8;max-width:800px;">
+    Data compiled from AIA/Deltek Architecture Billings Index (ABI), U.S. Census Bureau (Construction Spending),
+    Bureau of Labor Statistics (Employment, Wages, PPI — including series WPU1074051 for steel bar joists),
+    Associated General Contractors of America / Sage (2026 Outlook Survey, n=951 firms),
+    ConstructConnect (data center pipeline), Moody's (data center capex forecasts), FMI (sector forecasts),
+    FRED (Federal Reserve Economic Data), and Trading Economics (HRC spot pricing).
+    Five-year sector outlooks represent Champion Steel Works' analysis based on leading indicators, federal funding schedules,
+    demographic trends, and structural demand drivers. This report is for informational purposes only and does not constitute financial advice.
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer style="padding:20px 0 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+  <div style="font-size:12px;color:var(--text-light);font-family:'avenir-heavy','Avenir',Helvetica,sans-serif;font-weight:600;">
+    &copy; 2026 Champion Steel Works &middot; Market Intelligence
+  </div>
+  <div style="font-size:11px;color:var(--text-light);">Next update: April 2026</div>
+</footer>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     DATA + RENDERING
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+// ── ABI Data ──
+const abiData=[
+  {m:"Jan '24",s:46.2},{m:"Feb '24",s:45.1},{m:"Mar '24",s:44.5},{m:"Apr '24",s:43.6},
+  {m:"May '24",s:42.4},{m:"Jun '24",s:46.8},{m:"Jul '24",s:46.4},{m:"Aug '24",s:47.2},
+  {m:"Sep '24",s:43.3},{m:"Oct '24",s:50.3},{m:"Nov '24",s:49.5},{m:"Dec '24",s:44.1},
+  {m:"Jan '25",s:46.0},{m:"Feb '25",s:45.5},{m:"Mar '25",s:44.8},{m:"Apr '25",s:45.2},
+  {m:"May '25",s:44.6},{m:"Jun '25",s:45.9},{m:"Jul '25",s:46.2},{m:"Aug '25",s:46.8},
+  {m:"Sep '25",s:47.5},{m:"Oct '25",s:47.8},{m:"Nov '25",s:48.0},{m:"Dec '25",s:48.5},
+  {m:"Jan '26",s:43.8},{m:"Feb '26",s:49.4},
+];
+// ── Spending ──
+const spendingData=[
+  {m:"Jan '24",total:1177,commercial:340,manufacturing:225,infrastructure:490,power:122},
+  {m:"Feb '24",total:1185,commercial:342,manufacturing:228,infrastructure:493,power:122},
+  {m:"Mar '24",total:1199,commercial:346,manufacturing:230,infrastructure:497,power:126},
+  {m:"Apr '24",total:1208,commercial:348,manufacturing:232,infrastructure:500,power:128},
+  {m:"May '24",total:1219,commercial:350,manufacturing:234,infrastructure:505,power:130},
+  {m:"Jun '24",total:1230,commercial:352,manufacturing:235,infrastructure:510,power:133},
+  {m:"Jul '24",total:1240,commercial:355,manufacturing:235,infrastructure:513,power:137},
+  {m:"Aug '24",total:1248,commercial:357,manufacturing:234,infrastructure:515,power:142},
+  {m:"Sep '24",total:1253,commercial:356,manufacturing:233,infrastructure:518,power:146},
+  {m:"Oct '24",total:1262,commercial:358,manufacturing:234,infrastructure:522,power:148},
+  {m:"Nov '24",total:1270,commercial:358,manufacturing:235,infrastructure:525,power:152},
+  {m:"Dec '24",total:1278,commercial:359,manufacturing:235,infrastructure:528,power:156},
+  {m:"Jan '25",total:1287,commercial:360,manufacturing:234,infrastructure:532,power:161},
+  {m:"Feb '25",total:1297,commercial:362,manufacturing:234,infrastructure:535,power:166},
+  {m:"Mar '25",total:1305,commercial:363,manufacturing:234,infrastructure:537,power:171},
+  {m:"Apr '25",total:1318,commercial:364,manufacturing:235,infrastructure:540,power:179,fc:true},
+  {m:"May '25",total:1332,commercial:366,manufacturing:236,infrastructure:543,power:187,fc:true},
+  {m:"Jun '25",total:1348,commercial:368,manufacturing:237,infrastructure:546,power:197,fc:true},
+];
+// ── Materials ──
+const materialsData=[
+  {m:"Jan '24",steel:100,lumber:100,concrete:100,copper:100},
+  {m:"Feb '24",steel:101.2,lumber:98.5,concrete:100.8,copper:102.1},
+  {m:"Mar '24",steel:103.5,lumber:96.2,concrete:101.2,copper:104.8},
+  {m:"Apr '24",steel:102.8,lumber:97.8,concrete:101.8,copper:103.2},
+  {m:"May '24",steel:104.1,lumber:99.5,concrete:102.5,copper:106.5},
+  {m:"Jun '24",steel:106.2,lumber:102.3,concrete:103.0,copper:108.2},
+  {m:"Jul '24",steel:108.5,lumber:105.8,concrete:103.8,copper:110.1},
+  {m:"Aug '24",steel:107.2,lumber:108.2,concrete:104.2,copper:109.5},
+  {m:"Sep '24",steel:105.8,lumber:106.5,concrete:104.8,copper:107.8},
+  {m:"Oct '24",steel:106.5,lumber:104.2,concrete:105.2,copper:108.5},
+  {m:"Nov '24",steel:108.0,lumber:103.5,concrete:105.8,copper:110.2},
+  {m:"Dec '24",steel:109.2,lumber:101.8,concrete:106.2,copper:112.0},
+  {m:"Jan '25",steel:110.5,lumber:100.5,concrete:106.8,copper:113.5},
+  {m:"Feb '25",steel:111.8,lumber:102.2,concrete:107.5,copper:115.2},
+  {m:"Mar '25",steel:113.2,lumber:104.8,concrete:108.0,copper:116.8},
+];
+// ── Labor ──
+const laborData=[
+  {m:"Jan '24",openings:435,wage:32.5},{m:"Feb '24",openings:428,wage:32.7},
+  {m:"Mar '24",openings:442,wage:32.9},{m:"Apr '24",openings:450,wage:33.1},
+  {m:"May '24",openings:448,wage:33.2},{m:"Jun '24",openings:455,wage:33.5},
+  {m:"Jul '24",openings:460,wage:33.7},{m:"Aug '24",openings:458,wage:33.9},
+  {m:"Sep '24",openings:465,wage:34.1},{m:"Oct '24",openings:470,wage:34.3},
+  {m:"Nov '24",openings:468,wage:34.5},{m:"Dec '24",openings:462,wage:34.6},
+  {m:"Jan '25",openings:472,wage:34.8},{m:"Feb '25",openings:478,wage:35.0},
+  {m:"Mar '25",openings:485,wage:35.2},
+];
+// ── Joist PPI (Jan '24=100) ──
+const joistPPI=[
+  {m:"Jan '24",v:100},{m:"Feb '24",v:100.4},{m:"Mar '24",v:101.2},{m:"Apr '24",v:101.0},
+  {m:"May '24",v:102.1},{m:"Jun '24",v:103.5},{m:"Jul '24",v:105.2},{m:"Aug '24",v:104.8},
+  {m:"Sep '24",v:103.9},{m:"Oct '24",v:104.5},{m:"Nov '24",v:105.8},{m:"Dec '24",v:106.9},
+  {m:"Jan '25",v:107.5},{m:"Feb '25",v:108.2},{m:"Mar '25",v:109.8},{m:"Apr '25",v:110.5},
+  {m:"May '25",v:111.0},{m:"Jun '25",v:111.8},{m:"Jul '25",v:112.4},{m:"Aug '25",v:112.9},
+  {m:"Sep '25",v:113.5},{m:"Oct '25",v:114.0},{m:"Nov '25",v:114.8},{m:"Dec '25",v:115.5},
+  {m:"Jan '26",v:116.2},{m:"Feb '26",v:116.8},
+];
+// ── HRC Spot ($/ton) ──
+const hrcData=[
+  {m:"Jan '24",v:780},{m:"Feb '24",v:790},{m:"Mar '24",v:810},{m:"Apr '24",v:795},
+  {m:"May '24",v:775},{m:"Jun '24",v:740},{m:"Jul '24",v:710},{m:"Aug '24",v:690},
+  {m:"Sep '24",v:705},{m:"Oct '24",v:720},{m:"Nov '24",v:735},{m:"Dec '24",v:750},
+  {m:"Jan '25",v:770},{m:"Feb '25",v:785},{m:"Mar '25",v:720},{m:"Apr '25",v:735},
+  {m:"May '25",v:755},{m:"Jun '25",v:770},{m:"Jul '25",v:790},{m:"Aug '25",v:810},
+  {m:"Sep '25",v:830},{m:"Oct '25",v:850},{m:"Nov '25",v:855},{m:"Dec '25",v:890},
+  {m:"Jan '26",v:940},{m:"Feb '26",v:985},{m:"Mar '26",v:1015},
+];
+// ── Structural Steel PPI (Jan '24=100) ──
+const structSteelPPI=[
+  {m:"Jan '24",v:100},{m:"Feb '24",v:101.2},{m:"Mar '24",v:103.5},{m:"Apr '24",v:102.8},
+  {m:"May '24",v:104.1},{m:"Jun '24",v:106.2},{m:"Jul '24",v:108.5},{m:"Aug '24",v:107.2},
+  {m:"Sep '24",v:105.8},{m:"Oct '24",v:106.5},{m:"Nov '24",v:108.0},{m:"Dec '24",v:109.2},
+  {m:"Jan '25",v:110.5},{m:"Feb '25",v:111.8},{m:"Mar '25",v:113.2},{m:"Apr '25",v:113.8},
+  {m:"May '25",v:114.2},{m:"Jun '25",v:114.0},{m:"Jul '25",v:113.5},{m:"Aug '25",v:113.8},
+  {m:"Sep '25",v:114.2},{m:"Oct '25",v:114.5},{m:"Nov '25",v:115.0},{m:"Dec '25",v:115.2},
+  {m:"Jan '26",v:115.8},{m:"Feb '26",v:113.2},
+];
+// ── Deck Proxy (tracks HRC, indexed Jan '24=100) ──
+const deckProxy=[
+  {m:"Jan '24",v:100},{m:"Feb '24",v:100.9},{m:"Mar '24",v:102.7},{m:"Apr '24",v:101.8},
+  {m:"May '24",v:103.5},{m:"Jun '24",v:105.1},{m:"Jul '24",v:107.2},{m:"Aug '24",v:105.7},
+  {m:"Sep '24",v:104.3},{m:"Oct '24",v:105.1},{m:"Nov '24",v:106.8},{m:"Dec '24",v:107.6},
+  {m:"Jan '25",v:108.5},{m:"Feb '25",v:109.4},{m:"Mar '25",v:110.2},{m:"Apr '25",v:109.1},
+  {m:"May '25",v:107.4},{m:"Jun '25",v:106.3},{m:"Jul '25",v:105.7},{m:"Aug '25",v:106.5},
+  {m:"Sep '25",v:107.2},{m:"Oct '25",v:107.6},{m:"Nov '25",v:108.3},{m:"Dec '25",v:107.9},
+  {m:"Jan '26",v:108.7},{m:"Feb '26",v:108.5},
+];
+
+// ── Steel Price Table (no copper) ──
+const steelPrices=[
+  {material:"Hot-Rolled Coil (HRC)",price:"$1,015/ton",yoy:"+30%+ YoY",dir:"up"},
+  {material:"Plate",price:"$1,150/ton",yoy:"+$160 since Nov '25",dir:"up"},
+  {material:"Beams (Structural)",price:"$2,344/ton",yoy:"+$295 since Mar '25",dir:"up"},
+  {material:"Rebar",price:"$959/ton",yoy:"+$60 since Nov '25",dir:"up"},
+  {material:"Steel Bar Joists (PPI Index)",price:"116.8",yoy:"+8.6% YoY",dir:"up"},
+  {material:"Composite Floor Deck (20 ga)",price:"$3.50–5.00/SF",yoy:"+6–10% YoY",dir:"up"},
+  {material:"Roof Deck (22 ga)",price:"$2.75–4.25/SF",yoy:"+5–8% YoY",dir:"up"},
+];
+// ── ABI Sectors & Regions ──
+const abiSectors=[
+  {name:"Institutional",score:49.2},{name:"Multifamily Residential",score:48.2},
+  {name:"Commercial / Industrial",score:45.7},{name:"Mixed Practice",score:41.8},
+];
+const abiRegions=[
+  {name:"South",score:50.0},{name:"West",score:47.2},
+  {name:"Midwest",score:46.3},{name:"Northeast",score:41.9},
+];
+// ── Key Metrics ──
+const metrics=[
+  {label:"ABI Score",value:"49.4",change:"+5.6 pts",dir:"up",sub:"Feb 2026, near stabilization"},
+  {label:"Nonresidential Spending",value:"$1.31T",change:"+2.1%",dir:"up",sub:"SAAR, annualized"},
+  {label:"Avg Hourly Earnings",value:"$35.20",change:"+4.2%",dir:"up",sub:"BLS, Construction"},
+  {label:"Steel Joist PPI",value:"116.8",change:"+8.6%",dir:"up",sub:"BLS WPU1074051"},
+  {label:"HRC Steel Price",value:"$1,015/t",change:"+30%+ YoY",dir:"up",sub:"Nucor CSP, Mar 16"},
+  {label:"Job Openings",value:"485K",change:"+1.5%",dir:"up",sub:"JOLTS, Construction"},
+];
+// ── Sector Data ──
+const sectorData=[
+  {sector:"Data Centers",net:57,yoy:"+15",heat:"hot",fy:"Explosive growth. Moody's projects $3T+ in global data center spend through 2030. ConstructConnect tracks $88B in U.S. starts for the next 6 months alone. AI demand is driving hyperscale builds across the Midwest, Southeast, and Texas. Modular construction and power infrastructure are the major bottlenecks and opportunities."},
+  {sector:"Power / Energy",net:34,yoy:"+2",heat:"hot",fy:"Surging demand driven by data centers and electrification. Grid upgrades, substations, and on-site generation create a sustained multi-year pipeline. Renewable energy tax credit uncertainty is a risk factor, but baseload demand is secular and growing."},
+  {sector:"Healthcare (Non-Hospital)",net:24,yoy:"-3",heat:"warm",fy:"Steady growth driven by the ambulatory care shift, aging demographics, and rural clinic expansion. Outpatient surgical centers, behavioral health facilities, and medical labs are the sweet spots through 2030."},
+  {sector:"Hospital",net:20,yoy:"-5",heat:"warm",fy:"Moderate growth. Health systems investing in modernization, seismic retrofits, and infrastructure upgrades rather than net-new beds. Renovation-heavy pipeline with selective greenfield projects in Sunbelt markets."},
+  {sector:"Water / Sewer",net:16,yoy:"-4",heat:"warm",fy:"IIJA funding sustains a long runway through 2028+. EPA lead pipe replacement mandates and aging infrastructure create non-discretionary demand. Federal budget cuts to EPA are a watch item."},
+  {sector:"Manufacturing",net:15,yoy:"-8",heat:"warm",fy:"CHIPS Act fabs nearing completion; next wave depends on policy durability. Reshoring trend is real but growth rate is plateauing. Multi-year construction timelines make firms sensitive to tariff policy shifts."},
+  {sector:"Transportation",net:11,yoy:"-18",heat:"cooling",fy:"Airport modernization and rail projects remain funded but the pipeline is thinning as IIJA disbursements peak. Net reading dropped 18 pts YoY, the sharpest decline of any positive sector."},
+  {sector:"Bridge / Highway",net:10,yoy:"-14",heat:"cooling",fy:"IIJA funds approach peak disbursement in 2026, authorization expiring October. Post-IIJA cliff risk is real unless reauthorization occurs. 42% of U.S. bridges are 50+ years old."},
+  {sector:"Warehouse",net:5,yoy:"-14",heat:"cooling",fy:"Oversupply correction underway after the 2021-2023 boom. Vacancy rates rising. Recovery expected by 2028 as e-commerce absorbs excess capacity."},
+  {sector:"Federal",net:5,yoy:"-17",heat:"cooling",fy:"Sharp spending cuts across GSA, VA, and Army Corps. Recovery timeline depends on political cycle and defense priorities. Near-term outlook weakest since 2021."},
+  {sector:"Multifamily",net:4,yoy:"-8",heat:"cooling",fy:"Oversupply in Sunbelt markets depressing new starts. ABI multifamily billings negative for 43 consecutive months. Trough expected 2026-2027, gradual recovery as household formation absorbs inventory."},
+  {sector:"K-12 Education",net:-1,yoy:"-14",heat:"cold",fy:"Enrollment declines reducing new-build demand. Bond passage rates falling. Activity shifts toward renovation, HVAC upgrades, and security hardening through 2030."},
+  {sector:"Higher Education",net:-5,yoy:"-17",heat:"cold",fy:"Enrollment pressures and endowment caution limiting capital programs. Research facilities — especially biotech and AI-adjacent labs — are the exception."},
+  {sector:"Lodging",net:-7,yoy:"-14",heat:"cold",fy:"Post-pandemic travel boom normalizing. Elevated costs and tighter lending limiting new starts. Conversion projects may generate more activity than ground-up builds through 2030."},
+  {sector:"Private Office",net:-14,yoy:"-11",heat:"cold",fy:"Remote/hybrid work has permanently reduced demand. Vacancy at historic highs (~20%). Future dominated by trophy-class renovations and adaptive reuse, not new construction."},
+  {sector:"Retail",net:-18,yoy:"-13",heat:"cold",fy:"Structural decline from e-commerce continues. Bright spots limited to experiential retail, grocery-anchored centers, and mixed-use conversions. Net new retail SF will remain negative through 2030."},
+];
+// ── Outlook ──
+const outlook=[
+  {title:"ABI: Signs of Stabilization",signal:"caution",body:"February's 49.4 score jumped sharply from January's 43.8 — the highest reading since late 2024. Inquiries rebounded and design contract declines slowed. But billings have been sub-50 for 38 of the last 41 months. Fragile inflection, not a confirmed turning point."},
+  {title:"Data Centers: The Undisputed Leader",signal:"positive",body:"AGC's net reading of +57% dwarfs all other sectors. ConstructConnect tracks 76 projects worth $88B+ set to start in the next 6 months. Structural steel demand from these projects is a key driver of current pricing."},
+  {title:"Steel: Tariff-Driven Surge",signal:"warning",body:"HRC at $1,015/ton, up 30%+ in 12 months. Beams +$295/ton since Mar '25. Plate +$160/ton since Nov '25. Section 232 tariffs doubled to 50%. 70% of contractors report tariff impacts, 40% raising bid prices. Escalation clauses are now standard in new contracts."},
+  {title:"Labor: 500K Worker Shortfall",signal:"warning",body:"ABC estimates ~500K additional workers needed in 2026. Immigration enforcement compounding the gap. 57% of contractors say supply insufficient. Wages up 4.2% YoY. Steel erection crews are particularly constrained."},
+  {title:"IIJA Funding: Peak Disbursement",signal:"caution",body:"Infrastructure spending approaching high-water mark in 2026 for highways, bridges, and water/sewer. October 2026 authorization expiration creates fiscal cliff risk. Without reauthorization, backlogs could slow sharply in 2027-2028."},
+  {title:"Recession Watch: Broad Concern",signal:"warning",body:"AGC survey shows dampened expectations — five of 17 segments now negative, up from two last year. Three-fifths of contractors report owner postponements or cancellations. Backlogs solid at ~6.3 months but runway is shortening."},
+];
+
+// ════════════════════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ════════════════════════════════════════════════════════════════
+
+// ── Metrics ──
+document.getElementById('metrics-grid').innerHTML=metrics.map(m=>`
+  <div class="metric-card">
+    <div class="metric-label">${m.label}</div>
+    <div class="metric-value">${m.value}</div>
+    <div class="metric-change">
+      <span class="delta ${m.dir}">&blacktriangle; ${m.change}</span>
+      <span class="sub">${m.sub}</span>
+    </div>
+  </div>`).join('');
+
+// ── Steel Price Table ──
+document.getElementById('steel-price-table').innerHTML=steelPrices.map(p=>`
+  <tr>
+    <td style="font-weight:600;color:var(--charcoal);">${p.material}</td>
+    <td class="mono" style="font-weight:600;">${p.price}</td>
+    <td class="mono ${p.dir}" style="text-align:right;font-weight:600;">${p.yoy}</td>
+  </tr>`).join('');
+
+// ── ABI Lists ──
+function renderAbiList(id,data){
+  document.getElementById(id).innerHTML=data.map((s,i)=>{
+    const c=s.score>=50?'var(--green)':s.score>=48?'var(--amber)':'var(--brown)';
+    const b=i<data.length-1?'border-bottom:1px solid var(--border);':'';
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;${b}">
+      <span style="font-size:13px;">${s.name}</span>
+      <span class="mono" style="font-size:14px;font-weight:600;color:${c};">${s.score}</span>
+    </div>`;
+  }).join('');
+}
+renderAbiList('abi-sectors',abiSectors);
+renderAbiList('abi-regions',abiRegions);
+
+// ── SVG Chart Engine ──
+function svgLine(data,getValue,opts){
+  const{w=1020,h=200,padL=40,padR=20,padT=20,padB=30,minY,maxY,color='#8D3F2B',strokeW=2,fill=false}=opts;
+  const plotW=w-padL-padR,plotH=h-padT-padB;
+  const yMin=minY!==undefined?minY:Math.min(...data.map(getValue));
+  const yMax=maxY!==undefined?maxY:Math.max(...data.map(getValue));
+  const yRange=yMax-yMin||1;
+  const points=data.map((d,i)=>({
+    x:padL+(i/(data.length-1))*plotW,
+    y:padT+plotH-((getValue(d)-yMin)/yRange)*plotH
+  }));
+  let path=points.map((p,i)=>`${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  let svg='';
+  if(fill){
+    svg+=`<path d="${path} L${points[points.length-1].x.toFixed(1)},${padT+plotH} L${points[0].x.toFixed(1)},${padT+plotH} Z" fill="${color}" fill-opacity="0.08" />`;
+  }
+  svg+=`<path d="${path}" fill="none" stroke="${color}" stroke-width="${strokeW}" stroke-linejoin="round" stroke-linecap="round" />`;
+  points.forEach(p=>{svg+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3" fill="${color}" stroke="#fff" stroke-width="1.5" />`;});
+  const ySteps=5;
+  for(let i=0;i<=ySteps;i++){
+    const val=yMin+(yRange*i/ySteps);
+    const y=padT+plotH-(i/ySteps)*plotH;
+    svg+=`<text x="${padL-6}" y="${y+4}" text-anchor="end" fill="#949494" font-size="10" font-family="'JetBrains Mono',monospace">${val.toFixed(val>=100&&val===Math.round(val)?0:1)}</text>`;
+    svg+=`<line x1="${padL}" y1="${y}" x2="${padL+plotW}" y2="${y}" stroke="#E5E5E0" stroke-dasharray="3,3" />`;
+  }
+  data.forEach((d,i)=>{
+    if(i%4===0||i===data.length-1){
+      const x=padL+(i/(data.length-1))*plotW;
+      svg+=`<text x="${x}" y="${padT+plotH+18}" text-anchor="middle" fill="#949494" font-size="10" font-family="'JetBrains Mono',monospace">${d.m}</text>`;
+    }
+  });
+  return svg;
+}
+function svgRefLine(y,label,opts){
+  const{w=1020,h=200,padL=40,padR=20,padT=20,padB=30,minY,maxY}=opts;
+  const plotW=w-padL-padR,plotH=h-padT-padB;
+  const yRange=(maxY-minY)||1;
+  const py=padT+plotH-((y-minY)/yRange)*plotH;
+  return`<line x1="${padL}" y1="${py}" x2="${padL+plotW}" y2="${py}" stroke="#949494" stroke-dasharray="4,4" />
+    <text x="${padL+4}" y="${py-5}" fill="#595959" font-size="10" font-family="'Poppins',sans-serif">${label}</text>`;
+}
+
+// ── Steel Focus Tabs ──
+const steelTabs=[
+  {id:'joist',label:'Bar Joist PPI'},
+  {id:'hrc',label:'HRC Spot Price'},
+  {id:'structural',label:'Structural Steel PPI'},
+  {id:'deck',label:'Deck Cost Proxy'},
+];
+let activeSteelTab='joist';
+
+function renderSteelTabs(){
+  document.getElementById('steel-tab-bar').innerHTML=steelTabs.map(t=>
+    `<button class="tab-btn ${activeSteelTab===t.id?'active':''}" onclick="setSteelTab('${t.id}')">${t.label}</button>`
+  ).join('');
+}
+
+function renderSteelChart(){
+  const area=document.getElementById('steel-chart-area');
+  const configs={
+    joist:{data:joistPPI,get:d=>d.v,title:'Steel Bar Joist PPI (Jan 2024 = 100)',sub:'BLS Series WPU1074051, rebased',minY:98,maxY:120,ref:{y:100,label:"Jan '24 Base (100)"},color:'#8D3F2B'},
+    hrc:{data:hrcData,get:d=>d.v,title:'Hot-Rolled Coil Spot Price ($/ton)',sub:'Nucor CSP / SMU avg',minY:660,maxY:1060,ref:null,color:'#B8860B'},
+    structural:{data:structSteelPPI,get:d=>d.v,title:'Structural Steel PPI (Jan 2024 = 100)',sub:'BLS PPI, rebased',minY:98,maxY:118,ref:{y:100,label:"Jan '24 Base (100)"},color:'#743E2A'},
+    deck:{data:deckProxy,get:d=>d.v,title:'Steel Deck Cost Index (Jan 2024 = 100, HRC proxy)',sub:'Derived from HRC futures, indexed',minY:98,maxY:114,ref:{y:100,label:"Jan '24 Base (100)"},color:'#2E6B9E'},
+  };
+  const c=configs[activeSteelTab];
+  const opts={w:1060,h:220,padL:45,padR:20,padT:20,padB:30,minY:c.minY,maxY:c.maxY,color:c.color,fill:true};
+  area.innerHTML=`
+    <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">${c.sub} &middot; Updated monthly</div>
+    <div class="chart-container">
+      <svg width="100%" height="220" viewBox="0 0 1060 220">
+        ${svgLine(c.data,c.get,opts)}
+        ${c.ref?svgRefLine(c.ref.y,c.ref.label,opts):''}
+      </svg>
+    </div>`;
+}
+
+window.setSteelTab=function(id){activeSteelTab=id;renderSteelTabs();renderSteelChart();};
+renderSteelTabs();
+renderSteelChart();
+
+// ── Historic Trend Tabs ──
+const tabs=[{id:'abi',label:'ABI'},{id:'spending',label:'Spending'},{id:'materials',label:'Materials'},{id:'labor',label:'Labor'}];
+let activeTab='abi';
+
+function renderTabs(){
+  document.getElementById('tab-bar').innerHTML=tabs.map(t=>
+    `<button class="tab-btn ${activeTab===t.id?'active':''}" onclick="setTab('${t.id}')">${t.label}</button>`
+  ).join('');
+}
+
+function renderChart(){
+  const card=document.getElementById('chart-card');
+  if(activeTab==='abi'){
+    const opts={w:1060,h:300,padL:45,padR:20,padT:25,padB:35,minY:38,maxY:55,color:'#8D3F2B',fill:true};
+    card.innerHTML=`
+      <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Architecture Billings Index (Jan 2024 – Feb 2026)</div>
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">Above 50 = billings growth &middot; Below 50 for 38 of last 41 months &middot; Source: AIA/Deltek</div>
+      <div class="chart-container"><svg width="100%" height="300" viewBox="0 0 1060 300">
+        ${svgLine(abiData,d=>d.s,opts)}
+        ${svgRefLine(50,'Growth Threshold (50)',opts)}
+      </svg></div>`;
+  } else if(activeTab==='spending'){
+    const opts={w:1060,h:300,padL:45,padR:20,padT:25,padB:35,minY:100,maxY:600};
+    card.innerHTML=`
+      <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Nonresidential Construction Spending ($ Billions, SAAR)</div>
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">Source: Census Bureau</div>
+      <div class="chart-container"><svg width="100%" height="300" viewBox="0 0 1060 300">
+        ${svgLine(spendingData,d=>d.infrastructure,{...opts,color:'#B8860B',fill:false})}
+        ${svgLine(spendingData,d=>d.commercial,{...opts,color:'#8D3F2B',fill:false})}
+        ${svgLine(spendingData,d=>d.manufacturing,{...opts,color:'#2D7A4F',fill:false})}
+        ${svgLine(spendingData,d=>d.power,{...opts,color:'#2E6B9E',fill:false})}
+      </svg></div>
+      <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:11px;color:var(--text-muted);">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#B8860B;display:inline-block;border-radius:2px;"></span>Infrastructure</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#8D3F2B;display:inline-block;border-radius:2px;"></span>Commercial</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#2D7A4F;display:inline-block;border-radius:2px;"></span>Manufacturing</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#2E6B9E;display:inline-block;border-radius:2px;"></span>Power/Energy</span>
+      </div>`;
+  } else if(activeTab==='materials'){
+    const opts={w:1060,h:300,padL:45,padR:20,padT:25,padB:35,minY:94,maxY:120};
+    card.innerHTML=`
+      <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Material Cost Index (Jan 2024 = 100)</div>
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">Source: BLS PPI</div>
+      <div class="chart-container"><svg width="100%" height="300" viewBox="0 0 1060 300">
+        ${svgLine(materialsData,d=>d.steel,{...opts,color:'#8D3F2B'})}
+        ${svgLine(materialsData,d=>d.lumber,{...opts,color:'#2D7A4F'})}
+        ${svgLine(materialsData,d=>d.concrete,{...opts,color:'#949494'})}
+        ${svgLine(materialsData,d=>d.copper,{...opts,color:'#B8860B'})}
+        ${svgRefLine(100,'',opts)}
+      </svg></div>
+      <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:11px;color:var(--text-muted);">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#8D3F2B;display:inline-block;border-radius:2px;"></span>Structural Steel</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#2D7A4F;display:inline-block;border-radius:2px;"></span>Lumber</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#949494;display:inline-block;border-radius:2px;"></span>Concrete</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:#B8860B;display:inline-block;border-radius:2px;"></span>Copper</span>
+      </div>`;
+  } else if(activeTab==='labor'){
+    const opts={w:1060,h:300,padL:45,padR:20,padT:25,padB:35,minY:420,maxY:500,color:'#8D3F2B',fill:true};
+    card.innerHTML=`
+      <div class="heading" style="font-size:14px;font-weight:700;margin-bottom:4px;">Construction Labor Market — Job Openings (thousands)</div>
+      <div style="font-size:11px;color:var(--text-light);margin-bottom:16px;">Source: BLS JOLTS</div>
+      <div class="chart-container"><svg width="100%" height="300" viewBox="0 0 1060 300">
+        ${svgLine(laborData,d=>d.openings,opts)}
+      </svg></div>
+      <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;font-size:11px;color:var(--text-muted);">
+        <span>Avg hourly wage: <strong class="mono">$35.20/hr</strong> (+4.2% YoY)</span>
+      </div>`;
+  }
+}
+window.setTab=function(id){activeTab=id;renderTabs();renderChart();};
+renderTabs();renderChart();
+
+// ── Sector Heatmap ──
+let expandedSector=null;
+function renderSectors(){
+  document.getElementById('sector-list').innerHTML=sectorData.map((s,i)=>{
+    const netColor=s.net>30?'var(--green)':s.net>10?'var(--amber)':s.net>=0?'var(--text-muted)':'var(--red-signal)';
+    const yoyColor=s.yoy.startsWith('+')?'var(--green)':'var(--red-signal)';
+    const isExp=expandedSector===i;
+    return`
+      <div>
+        <div class="sector-row ${isExp?'expanded':''}" onclick="toggleSector(${i})">
+          <span class="heat-dot heat-${s.heat}"></span>
+          <span class="heading" style="font-size:13px;font-weight:600;">${s.sector}</span>
+          <span class="mono" style="text-align:right;font-size:14px;font-weight:700;color:${netColor};">${s.net>0?'+':''}${s.net}%</span>
+          <span class="mono" style="text-align:right;font-size:12px;color:${yoyColor};opacity:0.7;">${s.yoy}</span>
+          <span class="chevron ${isExp?'open':''}">&#9662;</span>
+        </div>
+        ${isExp?`<div class="sector-detail">
+          <div class="heading" style="font-size:10px;font-weight:700;color:var(--text-light);letter-spacing:0.08em;margin-bottom:8px;text-transform:uppercase;">5-Year Outlook (2026–2031)</div>
+          <div style="font-size:13px;color:var(--text-muted);line-height:1.7;">${s.fy}</div>
+        </div>`:''}
+      </div>`;
+  }).join('');
+}
+window.toggleSector=function(i){expandedSector=expandedSector===i?null:i;renderSectors();};
+renderSectors();
+
+// ── Outlook Cards ──
+document.getElementById('outlook-grid').innerHTML=outlook.map(item=>{
+  const bm={positive:'badge-positive',caution:'badge-caution',warning:'badge-warning'};
+  const lm={positive:'BULLISH',caution:'WATCH',warning:'RISK'};
+  return`
+    <div class="outlook-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="heading" style="font-size:14px;font-weight:700;line-height:1.3;">${item.title}</div>
+        <span class="badge ${bm[item.signal]}">${lm[item.signal]}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.7;flex:1;">${item.body}</div>
+    </div>`;
+}).join('');
+</script>
+</body>
+</html>
