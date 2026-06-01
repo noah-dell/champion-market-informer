@@ -739,27 +739,23 @@ document.getElementById('outlook-grid').innerHTML=outlook.map(item=>{
 }).join('');
 </script>
 
-<!-- Parent-iframe auto-resize handshake (added 2026-05-28).
-     Reports content height to the parent page so the Wix Custom Embed listener
-     can size the iframe wrapper, eliminating the double-scrollbar issue. -->
+<!-- Parent-iframe auto-resize handshake (added 2026-05-28, hardened 2026-06-01).
+     Reports content height to the parent page so the Wix Custom Code listener
+     can size the embed wrapper, eliminating the double-scrollbar issue.
+     Hardened: responds to pings UNCONDITIONALLY (bypasses the de-dupe) so the
+     parent can always pull the current height even after the initial posts. -->
 <script>
 (function(){
   if (window.top === window.self) return; // only run inside an iframe
   var lastSent = 0;
-  function sendHeight(){
-    var h = Math.max(
+  function measure(){
+    return Math.max(
       document.documentElement.scrollHeight,
-      document.body ? document.body.scrollHeight : 0
+      document.body ? document.body.scrollHeight : 0,
+      document.documentElement.offsetHeight
     );
-    if (!h || Math.abs(h - lastSent) < 4) return;
-    lastSent = h;
-    try {
-      window.parent.postMessage({
-        type: 'csw-market-informer-resize',
-        source: 'champion-market-informer',
-        height: h
-      }, '*');
-    } catch(e) {}
   }
-  if (document.readyState === 'complete') sendHeight();
-  else window.addEventLis
+  function sendHeight(force){
+    var h = measure();
+    if (!h) return;
+    if (!force && Math.abs(h - lastSent) < 
