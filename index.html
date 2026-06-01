@@ -758,4 +758,32 @@ document.getElementById('outlook-grid').innerHTML=outlook.map(item=>{
   function sendHeight(force){
     var h = measure();
     if (!h) return;
-    if (!force && Math.abs(h - lastSent) < 
+    if (!force && Math.abs(h - lastSent) < 4) return; // de-dupe only for auto-sends
+    lastSent = h;
+    try {
+      window.parent.postMessage({
+        type: 'csw-market-informer-resize',
+        source: 'champion-market-informer',
+        height: h
+      }, '*');
+    } catch(e) {}
+  }
+  if (document.readyState === 'complete') sendHeight(true);
+  else window.addEventListener('load', function(){ sendHeight(true); });
+  document.addEventListener('DOMContentLoaded', function(){ sendHeight(true); });
+  // Re-broadcast across the first ~12s to cover late font/layout shifts.
+  [100, 300, 600, 1000, 1500, 2500, 4000, 6000, 9000, 12000].forEach(function(ms){ setTimeout(function(){ sendHeight(false); }, ms); });
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(function(){ sendHeight(false); }).observe(document.documentElement); } catch(e) {}
+    try { if (document.body) new ResizeObserver(function(){ sendHeight(false); }).observe(document.body); } catch(e) {}
+  }
+  // Fonts can change height after they swap in.
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function(){ sendHeight(false); }); }
+  // Respond to a parent ping by ALWAYS posting the current height (force).
+  window.addEventListener('message', function(evt){
+    if (evt && evt.data && evt.data.type === 'csw-market-informer-ping') sendHeight(true);
+  });
+})();
+</script>
+</body>
+</html>
