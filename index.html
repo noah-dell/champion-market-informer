@@ -452,9 +452,9 @@ const deckProxy=[
 // ── Steel Price Table (no copper) ──
 const steelPrices=[
   {material:"Hot-Rolled Coil (HRC)",price:"$1,115/ton",yoy:"+45% YoY",dir:"up"},
-  {material:"Plate",price:"$1,245/ton (avg)",yoy:"multi-yr high (SMU)",dir:"up"},
-  {material:"Beams (Structural)",price:"~$2,604/ton",yoy:"+$50/st hike Jun 8",dir:"up"},
-  {material:"Rebar",price:"$1,084/ton",yoy:"firm (Kallanish May)",dir:"up"},
+  {material:"Plate",price:"$1,245/ton (avg)",yoy:"~+22% YoY",dir:"up"},
+  {material:"Beams (Structural)",price:"~$2,604/ton",yoy:"~+13% YoY",dir:"up"},
+  {material:"Rebar",price:"$1,084/ton",yoy:"~+25% YoY",dir:"up"},
   {material:"Steel Bar Joists (PPI Index)",price:"120.2 (Apr '26)",yoy:"+13.6% YoY",dir:"up"},
   {material:"Composite Floor Deck (20 ga)",price:"$3.85–5.40/SF",yoy:"+8–13% YoY",dir:"up"},
   {material:"Roof Deck (22 ga)",price:"$3.10–4.60/SF",yoy:"+9–11% YoY",dir:"up"},
@@ -781,4 +781,5 @@ document.getElementById('outlook-grid').innerHTML=outlook.map(item=>{
   // Fonts can change height after they swap in.
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function(){ sendHeight(false); }); }
   // Respond to a parent ping by ALWAYS posting the current height (force).
-  window.addEventListener('message', func
+  window.addEventListener('message', function(evt){
+    if (evt && evt.
