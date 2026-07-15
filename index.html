@@ -311,7 +311,7 @@
   <div style="font-size:12px;color:var(--text-light);font-family:'avenir-heavy','Avenir',Helvetica,sans-serif;font-weight:600;">
     &copy; 2026 Champion Steel Works &middot; Market Intelligence
   </div>
-  <div style="font-size:11px;color:var(--text-light);">Next update: mid-July 2026</div>
+  <div style="font-size:11px;color:var(--text-light);">Next update: early August 2026</div>
 </footer>
 
 </div>
@@ -419,7 +419,7 @@ const joistPPI=[
   {m:"Jan '25",v:107.5},{m:"Feb '25",v:108.2},{m:"Mar '25",v:109.8},{m:"Apr '25",v:110.5},
   {m:"May '25",v:111.0},{m:"Jun '25",v:111.8},{m:"Jul '25",v:112.4},{m:"Aug '25",v:112.9},
   {m:"Sep '25",v:113.5},{m:"Oct '25",v:114.0},{m:"Nov '25",v:114.8},{m:"Dec '25",v:115.5},
-  {m:"Jan '26",v:116.2},{m:"Feb '26",v:116.8},{m:"Mar '26",v:117.5},{m:"Apr '26",v:120.2},
+  {m:"Jan '26",v:116.2},{m:"Feb '26",v:116.8},{m:"Mar '26",v:117.5},{m:"Apr '26",v:120.2},{m:"May '26",v:121.4},
 ];
 // ── HRC Spot ($/ton) ──
 const hrcData=[
@@ -429,7 +429,7 @@ const hrcData=[
   {m:"Jan '25",v:770},{m:"Feb '25",v:785},{m:"Mar '25",v:720},{m:"Apr '25",v:735},
   {m:"May '25",v:755},{m:"Jun '25",v:770},{m:"Jul '25",v:790},{m:"Aug '25",v:810},
   {m:"Sep '25",v:830},{m:"Oct '25",v:850},{m:"Nov '25",v:855},{m:"Dec '25",v:890},
-  {m:"Jan '26",v:940},{m:"Feb '26",v:985},{m:"Mar '26",v:1015},{m:"Apr '26",v:1045},{m:"May '26",v:1090},{m:"Jun '26",v:1115},{m:"Jul '26",v:1130},
+  {m:"Jan '26",v:940},{m:"Feb '26",v:985},{m:"Mar '26",v:1015},{m:"Apr '26",v:1045},{m:"May '26",v:1090},{m:"Jun '26",v:1115},{m:"Jul '26",v:1135},
 ];
 // ── Structural Steel PPI (Jan '24=100) ──
 const structSteelPPI=[
@@ -449,16 +449,16 @@ const deckProxy=[
   {m:"Jan '25",v:108.5},{m:"Feb '25",v:109.4},{m:"Mar '25",v:110.2},{m:"Apr '25",v:109.1},
   {m:"May '25",v:107.4},{m:"Jun '25",v:106.3},{m:"Jul '25",v:105.7},{m:"Aug '25",v:106.5},
   {m:"Sep '25",v:107.2},{m:"Oct '25",v:107.6},{m:"Nov '25",v:108.3},{m:"Dec '25",v:107.9},
-  {m:"Jan '26",v:108.7},{m:"Feb '26",v:108.5},{m:"Mar '26",v:109.5},{m:"Apr '26",v:110.8},{m:"May '26",v:112.0},{m:"Jun '26",v:114.5},{m:"Jul '26",v:115.8},
+  {m:"Jan '26",v:108.7},{m:"Feb '26",v:108.5},{m:"Mar '26",v:109.5},{m:"Apr '26",v:110.8},{m:"May '26",v:112.0},{m:"Jun '26",v:114.5},{m:"Jul '26",v:116.3},
 ];
 
 // ── Steel Price Table (no copper) ──
 const steelPrices=[
-  {material:"Hot-Rolled Coil (HRC)",price:"$1,130/ton",yoy:"+47% YoY",dir:"up"},
-  {material:"Plate",price:"$1,245/ton (avg)",yoy:"~+22% YoY",dir:"up"},
+  {material:"Hot-Rolled Coil (HRC)",price:"$1,135/ton",yoy:"~+44% YoY",dir:"up"},
+  {material:"Plate",price:"$1,270/ton (avg)",yoy:"~+23% YoY",dir:"up"},
   {material:"Beams (Structural)",price:"~$2,604/ton",yoy:"~+13% YoY",dir:"up"},
   {material:"Rebar",price:"$1,084/ton",yoy:"~+25% YoY",dir:"up"},
-  {material:"Steel Bar Joists (PPI Index)",price:"120.2 (Apr '26)",yoy:"+13.6% YoY",dir:"up"},
+  {material:"Steel Bar Joists (PPI Index)",price:"121.4 (May '26)",yoy:"+15.6% YoY",dir:"up"},
   {material:"Composite Floor Deck (20 ga)",price:"$3.85–5.40/SF",yoy:"+8–13% YoY",dir:"up"},
   {material:"Roof Deck (22 ga)",price:"$3.10–4.60/SF",yoy:"+9–11% YoY",dir:"up"},
 ];
@@ -476,8 +476,8 @@ const metrics=[
   {label:"ABI Score",value:"44.5",change:"-3.8 pts",dir:"down",sub:"May 2026 (AIA/Deltek); Jun due ~Jul 17"},
   {label:"Nonresidential Spending",value:"$1.25T",change:"-0.2% MoM",dir:"down",sub:"SAAR, May 2026 (Census C30 / ABC)"},
   {label:"Avg Hourly Earnings",value:"$38.97",change:"+5.0%",dir:"up",sub:"BLS Constr. prod/nonsup, May '26"},
-  {label:"Steel Joist PPI",value:"120.2",change:"+13.6%",dir:"up",sub:"BLS WPU1074051, Apr '26 latest"},
-  {label:"HRC Steel Price",value:"$1,130/t",change:"+47% YoY",dir:"up",sub:"Nucor CSP, late Jun"},
+  {label:"Steel Joist PPI",value:"121.4",change:"+15.6%",dir:"up",sub:"BLS WPU1074051, May '26 latest"},
+  {label:"HRC Steel Price",value:"$1,135/t",change:"~+44% YoY",dir:"up",sub:"Nucor CSP, wk of Jul 13"},
   {label:"Job Openings",value:"298K",change:"+32K MoM",dir:"up",sub:"JOLTS Constr., May '26 (rel. Jun 30)"},
 ];
 // ── Sector Data ──
@@ -503,10 +503,10 @@ const sectorData=[
 const outlook=[
   {title:"ABI: Billings Weaken Sharply in May",signal:"caution",body:"May's 44.5 reading (released mid-June) dropped from April's 48.3 to the weakest level since January — national billings still have not crossed 50 since January 2023. The deterioration is broad: the inquiries index slipped below 50 for the first time in four months and new design contracts weakened, erasing the constructive undertone from spring. AIA ties the softness to economic uncertainty from the Iran conflict, higher gas prices, and inflation prompting clients to pause projects. Billings fell across all specializations and all four regions, with the West holding up best. The ABI leads nonres construction by 9–12 months, so expect a slower, more uncertain path. June ABI due ~Jul 17."},
   {title:"Data Centers & Megaprojects Lead",signal:"positive",body:"Dodge's 2026 forecast lifts nonresidential building starts +3% to $481B, with data centers projected +34%, industrial +22%, healthcare +18%, education +12%, and office +4%. Construction starts rebounded +13% in March after the February pullback. AGC's net reading of +57% on data centers still dwarfs all other sectors and is the primary driver of structural steel demand."},
-  {title:"Steel: Coil Grinds Higher, Beams Hold",signal:"warning",body:"Nucor lifted its HRC CSP to $1,130/ton in late June — the highest since early 2023 — extending an unbroken run of weekly hikes since late January; SMU's June 9 spot average was $1,115/ton. On beams, no new mill letter has landed since Gerdau's June 8 structural increase (beams +$50/st, channels/angles up to +$80/st), which stacked on the +$90/st May 26 round to hold beams near $2,604/ton. Plate held at $1,245/ton avg (SMU); rebar continued to firm. Steel bar joist PPI (WPU1074051) was 355.876 in April (+13.6% YoY). AISI capacity utilization is holding in the ~80–82% band. Sheet inventories sit near their lowest since May 2021 and mills report minimal HRC negotiability. Lock in pricing and add escalation clauses — the June beam letter is a direct fabrication cost input."},
+  {title:"Steel: Coil Hikes Stall, Beams Hold",signal:"warning",body:"Nucor's HRC CSP reached $1,135/ton for the week of July 13, but momentum is fading: after 23 straight weekly hikes totaling $380/st, Nucor held flat at $1,130 on July 6 — its first back-to-back pause since January; SMU's June 30 spot average was $1,160/ton. On beams, no new mill letter has landed since Gerdau's June 8 increase (+$40–80/st), which stacked on the +$90/st May 26 round to hold beams near $2,604/ton. SSAB lifted plate another $40/st on July 8, taking the average to ~$1,270/ton. Steel bar joist PPI (WPU1074051) rose to 362.180 in May (+15.6% YoY). AISI utilization eased to 80.4% (week ending July 4) from the 82.2% spring peak, and SMU notes sheet lead times took a breather — early hints the coil run is maturing. Lock in pricing and keep escalation clauses on beam work."},
   {title:"Labor: Openings Hit 10-Month High",signal:"warning",body:"JOLTS construction openings jumped to 298K in May (+32K MoM, +76K YoY; released June 30) — the highest in 10 months. But the construction hiring rate slipped to 3.5%, matching February's low, so the surge likely reflects intense demand for specific data-center trades (electricians especially) rather than broad industrywide hiring. Production/nonsupervisory construction wages held at $38.97/hr in May (+5.0% YoY); June figures release July 2. ABC still estimates ~500K additional workers needed in 2026; the structural shortage is unchanged."},
   {title:"Construction Spending: Nonres Slips",signal:"caution",body:"Nonresidential construction spending edged down -0.2% in May to roughly a $1.248T SAAR (ABC analysis of Census C30, released July 1) — the softness concentrated in private nonres as manufacturing construction keeps falling YoY, while data centers remain the standout area of private-sector expansion. April's level was $1.250T. October 2026 IIJA authorization expiration still creates fiscal-cliff risk; without reauthorization, highway/bridge backlogs could slow in 2027–2028."},
-  {title:"Tariffs Still in the Driver's Seat",signal:"warning",body:"Section 232 tariffs on the full customs value of imported steel, aluminum, and copper continue to underpin domestic price action. AISI capacity utilization peaked at 82.2% the week ending May 16 — the highest since mid-2022 — before easing to 81.0% on May 23, with year-to-date utilization at 78.5%. The combination of tariff pass-through, elevated utilization, and ongoing data center/infrastructure demand is fueling the current pricing trajectory. Dodge forecasts +3% nonresidential growth in 2026 but flags continued tariff uncertainty — compounded by the Iran conflict and energy-price pressure cited in AIA's April report — as the dominant downside risk for project pipeline decisions."},
+  {title:"Tariffs Still in the Driver's Seat",signal:"warning",body:"Section 232 tariffs on the full customs value of imported steel, aluminum, and copper continue to underpin domestic price action. AISI capacity utilization ran at 80.4% the week ending July 4 — off the 82.2% peak set the week of May 16 (its highest since mid-2022) — with year-to-date utilization near 78.5%. Tariff pass-through, still-elevated utilization, and ongoing data center/infrastructure demand keep prices firm, though the recent pause in mill hikes bears watching. Dodge forecasts +3% nonresidential growth in 2026 but flags continued tariff uncertainty — compounded by the Iran conflict and energy-price pressure cited in AIA's spring report — as the dominant downside risk for project pipeline decisions."},
 ];
 
 // ════════════════════════════════════════════════════════════════
@@ -785,9 +785,4 @@ document.getElementById('outlook-grid').innerHTML=outlook.map(item=>{
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function(){ sendHeight(false); }); }
   // Respond to a parent ping by ALWAYS posting the current height (force).
   window.addEventListener('message', function(evt){
-    if (evt && evt.data && evt.data.type === 'csw-market-informer-ping') sendHeight(true);
-  });
-})();
-</script>
-</body>
-</
+    if (evt && evt.data && evt.data.type === 'csw-market-informe
