@@ -179,7 +179,7 @@
       </h1>
       <div style="margin-top:8px; height:4px; background:var(--gold); border-radius:2px; width:80px;"></div>
       <div class="heading" style="margin-top:12px;display:flex;align-items:center;gap:12px;color:var(--text-muted);font-size:13px;font-weight:500;">
-        <span>August 2026 Edition (Aug 28)</span>
+        <span>September 2026 Edition (Sep 1)</span>
         <span style="width:4px;height:4px;border-radius:50%;background:var(--gray);display:inline-block;"></span>
         <span>Updated twice monthly</span>
       </div>
@@ -311,7 +311,7 @@
   <div style="font-size:12px;color:var(--text-light);font-family:'avenir-heavy','Avenir',Helvetica,sans-serif;font-weight:600;">
     &copy; 2026 Champion Steel Works &middot; Market Intelligence
   </div>
-  <div style="font-size:11px;color:var(--text-light);">Next update: early September 2026</div>
+  <div style="font-size:11px;color:var(--text-light);">Next update: mid-September 2026</div>
 </footer>
 
 </div>
@@ -417,6 +417,7 @@ const hrcData=[
   {m:"Sep '25",v:830},{m:"Oct '25",v:850},{m:"Nov '25",v:855},{m:"Dec '25",v:890},
   {m:"Jan '26",v:940},{m:"Feb '26",v:985},{m:"Mar '26",v:1015},{m:"Apr '26",v:1045},
   {m:"May '26",v:1090},{m:"Jun '26",v:1115},{m:"Jul '26",v:1135},{m:"Aug '26",v:1180},
+  {m:"Sep '26",v:1185},
 ];
 // ── Structural Steel PPI (Jan '24=100, BLS WPU101704 Hot Rolled Bars/Plates/Structural Shapes via FRED) ──
 const structSteelPPI=[
@@ -439,11 +440,12 @@ const deckProxy=[
   {m:"Sep '25",v:106.4},{m:"Oct '25",v:109.0},{m:"Nov '25",v:109.6},{m:"Dec '25",v:114.1},
   {m:"Jan '26",v:120.5},{m:"Feb '26",v:126.3},{m:"Mar '26",v:130.1},{m:"Apr '26",v:134.0},
   {m:"May '26",v:139.7},{m:"Jun '26",v:142.9},{m:"Jul '26",v:145.5},{m:"Aug '26",v:151.3},
+  {m:"Sep '26",v:151.9},
 ];
 
 // ── Steel Price Table (no copper) ──
 const steelPrices=[
-  {material:"Hot-Rolled Coil (HRC)",price:"$1,180/ton",yoy:"~+46% YoY",dir:"up"},
+  {material:"Hot-Rolled Coil (HRC)",price:"$1,185/ton",yoy:"~+43% YoY",dir:"up"},
   {material:"Plate",price:"$1,395/ton (SMU avg)",yoy:"~+29% YoY (est.)",dir:"up"},
   {material:"Beams (Common WF)",price:"$1,700/ton ($85.00/cwt)",yoy:"+14.6% YoY (PPI proxy)",dir:"up"},
   {material:"Rebar",price:"$1,084/ton",yoy:"~+25% YoY",dir:"up"},
@@ -463,10 +465,10 @@ const abiRegions=[
 // ── Key Metrics ──
 const metrics=[
   {label:"ABI Score",value:"46.6",change:"-0.7 pts",dir:"down",sub:"July 2026 (AIA/Deltek, rel. Aug 19)"},
-  {label:"Nonresidential Spending",value:"$1.28T",change:"+0.1% MoM",dir:"up",sub:"Total nonres SAAR, Jun '26 (Census C30); Jul due Sep 1"},
+  {label:"Nonresidential Spending",value:"$1.28T",change:"+0.1% MoM",dir:"up",sub:"Total nonres SAAR, Jun '26 (Census C30); Jul released Sep 1"},
   {label:"Avg Hourly Earnings",value:"$39.24",change:"+5.2%",dir:"up",sub:"BLS Constr. prod/nonsup, Jul '26"},
   {label:"Steel Joist PPI",value:"96.8",change:"+17.6%",dir:"up",sub:"BLS WPU1074051, Jul '26 latest"},
-  {label:"HRC Steel Price",value:"$1,180/t",change:"~+46% YoY",dir:"up",sub:"Nucor CSP, wk of Aug 24"},
+  {label:"HRC Steel Price",value:"$1,185/t",change:"~+43% YoY",dir:"up",sub:"Nucor CSP, wk of Aug 31"},
   {label:"Job Openings",value:"305K",change:"+14K MoM",dir:"up",sub:"JOLTS Constr., Jun '26; Jul due Sep 2"},
 ];
 // ── Sector Data ──
@@ -491,11 +493,11 @@ const sectorData=[
 // ── Outlook ──
 const outlook=[
   {title:"ABI Slips to 46.6 — June's Bounce Mostly Given Back",signal:"caution",body:"July's ABI (released Aug 19) fell to 46.6 from June's 47.3, extending the downturn to about three and a half years — the longest on record. Inquiries stayed positive at 52.6, but design contracts weakened to 47.2, and contracts lead billings. The South led regionally at 48.7; the Northeast was weakest at 44.8 for a second month. Multifamily (48.4) led by sector. ABI leads nonres construction by 9–12 months, so the near-term pipeline stays soft into 2027."},
-  {title:"Data Centers & Power Still the Pipeline's Engine",signal:"positive",body:"AGC and Dodge continue to point to data centers and power as the clear growth leaders, while FMI expects total 2026 construction spending up only ~1% — growth remains selective. Power-category spending hit a fresh $178B SAAR high in June; manufacturing kept sliding (-21% YoY) as CHIPS-era fab work winds down."},
-  {title:"Steel: Sheet and Plate Both Push Higher",signal:"warning",body:"Nucor raised HRC CSP to $1,180/ton for the week of Aug 24 (+$10), a fourth straight increase; SMU's HR average rose to $1,200/ton on Aug 27. Plate is tighter still at an SMU average of $1,395/ton, with SSAB seeking another $40/ton in an Aug 25 letter. Beams are now benchmarked to Nucor-Yamato's published list dated Aug 3 (replacing June 8): common WF at $85.00/cwt = $1,700/net ton with RMS included, heavier sections to $2,105 and S-shapes to $2,195. That replaces the ~$2,604–2,676/ton figure prior editions built by stacking hikes on an unverified base. Joist PPI (WPU1074051) is 96.8, +17.6% YoY. AISI utilization firmed to 80.0% (wk of Aug 22). Lock in pricing on plate and sheet."},
+  {title:"Data Centers & Power Still the Pipeline's Engine",signal:"positive",body:"The Dodge Momentum Index rose 6.9% in July to 291.7, +11.7% YoY — but strip out data centers and the commercial segment would be down 16.2% YoY. FMI still expects 2026 construction spending up only ~1%, so growth stays selective. Power-category spending hit a fresh $178B SAAR high in June; manufacturing kept sliding (-21% YoY) as CHIPS-era fab work winds down."},
+  {title:"Steel: Sheet Grinds Higher for a Fifth Week",signal:"warning",body:"Nucor lifted its HRC consumer spot price to $1,185/ton for the week of Aug 31 (+$5), a fifth straight increase; California Steel Industries went to $1,245/ton on the West Coast. SMU's HR average was $1,200/ton on Aug 27, with plate tighter still at $1,395/ton after SSAB's Aug 25 letter seeking another $40/ton. Beams stay benchmarked to Nucor-Yamato's list dated Aug 3, re-verified as current on Sep 1: common WF at $85.00/cwt = $1,700/net ton with RMS included, heavier sections to $2,105, S-shapes to $2,195. No new Nucor-Yamato or Gerdau beam letter since. Joist PPI (WPU1074051) is unchanged at 96.8, +17.6% YoY, with the August print due Sep 10. Lock in pricing on plate and sheet."},
   {title:"Labor: Wages Hit $39.24/hr, Openings Still 305K",signal:"warning",body:"July construction wages rose to $39.24/hr, +5.2% YoY (BLS CES, released Aug 7) — the fastest pace of any major goods-producing sector. June JOLTS remains the latest openings read at 305K (+14K MoM, +36% YoY); July JOLTS is due Sep 2. Construction payrolls were roughly flat in July. ABC's ~500K worker shortage estimate for 2026 stands."},
   {title:"Construction Spending: Essentially Flat at $1.28T",signal:"caution",body:"Nonresidential spending was $1.277T SAAR in June (Census C30), flat vs. May, -2% YoY. Power spending hit a record $178B (data centers), manufacturing fell to $173B (-21% YoY, CHIPS wind-down), commercial eased to $121B. October's IIJA authorization expiration remains a fiscal-cliff risk."},
-  {title:"Tariffs, Tight Mills and Lean Inventories",signal:"warning",body:"Section 232 tariffs keep underpinning domestic prices. AISI utilization climbed back to 80.0% (wk of Aug 22, 1.848M net tons, +4.8% YoY) after easing through early August. SMU lead times sit near multi-year highs — HRC ~6.5 weeks, plate ~7.5 — three to four weeks longer than last summer, and buyers report lean inventories. Dodge and FMI still flag tariff and financing-cost uncertainty as the top downside risks."},
+  {title:"Mills Ease Off, but Supply Stays Tight",signal:"warning",body:"The USW, U.S. Steel and Cleveland-Cliffs extended their labor contracts 30 days on Aug 31, averting a Sept. 1 strike but leaving the risk live into early October. Section 232 tariffs keep underpinning domestic prices. AISI utilization slipped to 78.7% in the week ending Aug 29 (1.818M net tons, a five-month low, still +3.1% YoY) from 80.0% a week earlier. SMU lead times remain near multi-year highs — HRC ~6.5 weeks, plate ~7.5 — three to four weeks longer than last summer, with lean buyer inventories. Tariff and financing-cost uncertainty stay the top downside risks."},
 ];
 
 // ════════════════════════════════════════════════════════════════
